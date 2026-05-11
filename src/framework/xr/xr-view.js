@@ -330,10 +330,8 @@ class XrView extends EventHandler {
             this._xrCamera = this._xrView.camera;
         }
 
-        const layer = frame.session.renderState.baseLayer;
-
         // viewport
-        const viewport = layer.getViewport(this._xrView);
+        const viewport = this._manager.xrBridge.getViewport(frame, this._xrView);
         this._viewport.x = viewport.x;
         this._viewport.y = viewport.y;
         this._viewport.z = viewport.width;
@@ -354,7 +352,7 @@ class XrView extends EventHandler {
             return;
         }
 
-        const binding = this._manager.webglBinding;
+        const binding = this._manager.graphicsBinding;
         if (!binding) {
             return;
         }
@@ -418,7 +416,7 @@ class XrView extends EventHandler {
 
         const gpu = this._manager.views.depthGpuOptimized;
 
-        const infoSource = gpu ? this._manager.webglBinding : frame;
+        const infoSource = gpu ? this._manager.graphicsBinding : frame;
         if (!infoSource) {
             this._depthInfo = null;
             return;
