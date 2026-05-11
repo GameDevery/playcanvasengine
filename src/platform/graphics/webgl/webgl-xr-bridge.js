@@ -39,6 +39,25 @@ class WebglXrBridge {
     }
 
     /**
+     * Sets the WebGL default framebuffer to the XR session's base layer framebuffer.
+     * When there is no base layer (for example after GPU device loss), falls back to the
+     * canvas framebuffer by assigning null.
+     *
+     * @param {XRFrame} frame - Current XR frame.
+     */
+    beginFrame(frame) {
+        const baseLayer = frame.session.renderState.baseLayer;
+        this.xrBridge.device.defaultFramebuffer = baseLayer ? baseLayer.framebuffer : null;
+    }
+
+    /**
+     * Resets the WebGL default framebuffer to the canvas (null).
+     */
+    endFrame() {
+        this.xrBridge.device.defaultFramebuffer = null;
+    }
+
+    /**
      * @returns {XRWebGLLayer|null} The active XR output layer, if any.
      */
     get presentationLayer() {
@@ -68,10 +87,14 @@ class WebglXrBridge {
     /**
      * @param {XRFrame} frame - Current XR frame.
      * @param {XRView} xrView - WebXR view.
-     * @returns {XRViewport} Viewport from the session base layer.
+     * @returns {XRViewport} Viewport from the session base layer, or zeros if the base layer is unavailable.
      */
     getViewport(frame, xrView) {
-        return frame.session.renderState.baseLayer.getViewport(xrView);
+        const baseLayer = frame.session.renderState.baseLayer;
+        if (!baseLayer) {
+            return /** @type {XRViewport} */ ({ x: 0, y: 0, width: 0, height: 0 });
+        }
+        return baseLayer.getViewport(xrView);
     }
 
     /**
