@@ -219,8 +219,8 @@ const ENGINE_TARGETS = (() => {
         options.push(
             ...buildJSOptions({
                 moduleFormat: 'esm',
-                buildType: 'release',
-                bundleState: 'bundled',
+                buildType: 'rel',
+                preserveModules: false,
                 input: '../src/index.js',
                 dir: 'dist/iframe'
             })
@@ -231,8 +231,8 @@ const ENGINE_TARGETS = (() => {
         options.push(
             ...buildJSOptions({
                 moduleFormat: 'esm',
-                buildType: 'debug',
-                bundleState: 'bundled',
+                buildType: 'dbg',
+                preserveModules: false,
                 input: '../src/index.js',
                 dir: 'dist/iframe'
             })
@@ -243,8 +243,8 @@ const ENGINE_TARGETS = (() => {
         options.push(
             ...buildJSOptions({
                 moduleFormat: 'esm',
-                buildType: 'profiler',
-                bundleState: 'bundled',
+                buildType: 'prf',
+                preserveModules: false,
                 input: '../src/index.js',
                 dir: 'dist/iframe'
             })
